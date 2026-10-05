@@ -1,48 +1,50 @@
-# 🛒 Análisis de ventas de una tienda online
+# 🎓 Analítica integral de marketing: Escuela online
 
-[![Actions Status](https://github.com/SilviaPalencia/data-analyst-project-277/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/SilviaPalencia/data-analyst-project-277/actions)
+[![hexlet-check](https://github.com/SilviaPalencia/data-analyst-project-279/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/SilviaPalencia/data-analyst-project-279/actions)
 
-Análisis exploratorio de la base de datos de ventas de una tienda online para responder una pregunta simple: **¿quién vende, quién compra y cuándo?** El proyecto identifica a los vendedores con mejor y peor desempeño, los patrones de venta por día de la semana y el perfil de los clientes, y presenta los resultados en un dashboard interactivo.
+Sistema de analítica de extremo a extremo para el equipo de marketing de una escuela online: desde el primer clic en un anuncio hasta la compra. Con el modelo de atribución **Last Paid Click** se mide qué canales y campañas generan ventas de verdad y cuáles solo generan clics.
 
 Proyecto de aprendizaje del programa [Analista de Datos de Códica](https://app.codica.la/programs/data-analyst).
 
 ## 🛠️ Herramientas
 
-- **SQL (PostgreSQL):** consultas con `JOIN`, agregaciones, subconsultas y funciones de fecha
-- **Google Sheets:** revisión y organización de los resultados
-- **Preset (Superset):** dashboard interactivo con las visualizaciones clave
+- **SQL (PostgreSQL):** CTE, funciones de ventana (`ROW_NUMBER`), `JOIN` y agregaciones
+- **Google Sheets:** dashboard con tablas dinámicas y métricas calculadas (CPU, CPL, CPPU, ROI)
+
+## 🔍 ¿Cómo funciona el modelo Last Paid Click?
+
+1. **Visita:** la persona entra al sitio desde un canal orgánico o pago.
+2. **Último clic pago:** si hubo varios clics pagos antes de convertir, todo el crédito se asigna al último (medios: cpc, cpm, cpa, youtube, cpp, tg, social).
+3. **Lead:** la persona deja sus datos.
+4. **Venta:** el lead se cierra con éxito y genera ingresos.
 
 ## 📁 Contenido del repositorio
 
 | Archivo | Descripción |
 |---|---|
-| [`queries.sql`](queries.sql) | Todas las consultas SQL del análisis, comentadas |
-| [`presentation.pdf`](presentation.pdf) | Presentación con los hallazgos y recomendaciones |
-| `customers_count.csv` | Total de clientes registrados |
-| `top_10_total_income.csv` | Los 10 vendedores con mayores ingresos |
-| `lowest_average_income.csv` | Vendedores con ingreso promedio por venta inferior al promedio general |
-| `day_of_the_week_income.csv` | Ingresos por vendedor y día de la semana |
-| `age_groups.csv` | Clientes por grupo de edad |
-| `customers_by_month.csv` | Clientes únicos e ingresos por mes |
-| `special_offer.csv` | Clientes cuya primera compra fue en una promoción |
-| `top_10_popular_products.csv` | Los 10 productos más vendidos por cantidad |
-| `top_10_profitable_products.csv` | Los 10 productos que más ingresos generan |
+| [`last_paid_click.sql`](last_paid_click.sql) | Atribución Last Paid Click por visitante |
+| [`aggregate_last_paid_click.sql`](aggregate_last_paid_click.sql) | Gasto, visitas, leads e ingresos por día, fuente, medio y campaña |
+| [`dashboard.sql`](dashboard.sql) | Todas las consultas usadas en el dashboard y la presentación |
+| `last_paid_click.csv`, `aggregate_last_paid_click.csv` | Muestras de los resultados |
+| [`presentation.pdf`](presentation.pdf) | Presentación con hallazgos y recomendaciones |
 
 ## 📊 Hallazgos principales
 
-- **19.759 clientes** registrados en la base de datos.
-- **Concentración de ventas:** los 3 vendedores principales generan cerca del **41% de los ingresos** totales del período.
-- **Clientes:** el grupo de **40+ años representa el 61%** de la base, seguido por el de 26-40 años (26%) y el de 16-25 años (13%).
-- **Días de la semana:** lunes y martes son los días con mayores ingresos (~4.000 millones cada uno), aunque la diferencia con el resto de la semana es pequeña.
-- **Tendencia mensual:** los ingresos pasaron de ~2.600 millones en septiembre a más de 8.000 millones en octubre de 1992, y se mantuvieron estables hasta diciembre.
-- **Promociones:** 15 clientes hicieron su primera compra durante una promoción especial (precio $0), lo que muestra el potencial de las promociones para atraer clientes nuevos.
+Período analizado: **junio de 2023**, con **38.567 visitas**, 32 canales rastreados y **4,2 M de rublos** invertidos en publicidad.
+
+- **Embudo:** 38.567 visitas → 747 leads (1,94%) → 87 ventas (11,65% de los leads). ROI general: **+55,9%**.
+- **Concentración:** **2 de 32 canales generan el 92% de los ingresos**: Yandex (77%, ROI 46,5%) y VK (16%, ROI 37,6%).
+- **Canales sin resultados:** 28 canales (Facebook, Google, Instagram, entre otros) traen visitas pero **0 ventas**.
+- **Costos sin registrar:** Admitad y Telegram generan ~460 mil rublos en ventas sin gasto registrado.
+- **Tiempo de cierre:** el 90% de los leads que compran se cierra en **25 días** desde el último clic pago.
+- **Efecto en el tráfico orgánico:** tras lanzar una campaña, el tráfico orgánico aumenta en promedio un 5,3% (correlación de 0,29). Es una señal positiva pero aún no concluyente.
 
 ## 💡 Recomendaciones
 
-- Emparejar a los vendedores con menor ingreso promedio con los del top para compartir buenas prácticas.
-- Concentrar promociones y campañas al inicio de la semana, cuando se registran más ventas.
-- Diseñar la comunicación de marketing pensando principalmente en el segmento de 40+ años, sin descuidar a los clientes más jóvenes.
-- Repetir la estrategia de promociones como puerta de entrada para nuevos clientes.
+- Reasignar el presupuesto de los 28 canales sin ventas hacia Yandex y VK.
+- Configurar el seguimiento de costos de Admitad y Telegram antes de escalarlos.
+- Esperar al menos 25 días antes de pausar o escalar una campaña nueva.
+- Seguir midiendo la relación entre gasto publicitario y tráfico orgánico con más campañas.
 
 ## 👩‍💻 Autora
 
